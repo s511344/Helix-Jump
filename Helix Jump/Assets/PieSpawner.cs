@@ -10,8 +10,10 @@ public class PieSpawner : MonoBehaviour
     private Vector3 _StartPosition;
     readonly System.Collections.Generic.List<GameObject> _Instances;
     public Transform Root;
-    public GameObject Origin        ;
+    public GameObject Origin;
 
+    public Action EndEvent;
+    public Action StartEvent;
     internal void Run(int seed, int count, int space)
     {
         Seed = seed;
@@ -24,6 +26,8 @@ public class PieSpawner : MonoBehaviour
     public int Seed;
     public int PieCount;
     public float Space;
+
+    public EventObj startObject;
     public PieSpawner()
     {
         _Instances = new List<GameObject>();
@@ -31,16 +35,24 @@ public class PieSpawner : MonoBehaviour
     void Start()
     {
         _StartPosition = Ball.position;
-        
+
         _Reset();
     }
 
     private void _Reset()
     {
-        foreach(var instance in _Instances)
+        foreach (var instance in _Instances)
         {
             GameObject.Destroy(instance);
-        }        
+        }
+        if (startObject) 
+        {
+            startObject.gameObject.SetActive(true);
+            startObject.AddEndEvent(() => { 
+                StartEvent?.Invoke();
+                startObject.gameObject.SetActive(false);
+            });
+        }
 
 
         var rand = new System.Random(Seed);
@@ -74,6 +86,10 @@ public class PieSpawner : MonoBehaviour
         endObj.transform.position = new Vector3(originPosition.x, originPosition.y - (PieCount + 1) * Space, originPosition.z);
         endObj.SetActive(true);
         endObj.transform.SetParent(Root);
+        var endComp = endObj.GetComponent<EventObj>() ?? endObj.AddComponent<EventObj>();
+        endComp.AddEndEvent(() => { EndEvent?.Invoke(); Destroy(endComp); });
+       
+
         _Instances.Add(endObj);
     }
 

@@ -38,22 +38,27 @@ public class LookAt : MonoBehaviour
         {
             var y = _Target.y + UnityEngine.Time.deltaTime * delta.y;
             _Target = new Vector3(_Target.x, y, _Target.z);
+          
         }
         if (Mathf.Abs(delta.z) > UpdateRange)
         {
             var z = _Target.z + UnityEngine.Time.deltaTime * delta.z;
             _Target = new Vector3(_Target.x, _Target.y, z);
         }
-        
-        
-
+  
         var vec = new Vector2(Target.position.x, Target.position.z) - new Vector2(Center.position.x , Center.position.z);
+     //   Vector3 cameraPos = Vector3.Lerp(transform.position, target, Time.deltaTime);
 
         var pos = vec.normalized * Distance;
         
-        transform.position = new Vector3(pos.x , _Target.y + OffsetY +3, pos.y);
-        transform.LookAt(new Vector3(_Target.x, _Target.y - OffsetY, _Target.z));
-        
+        //transform.position = new Vector3(cameraPos.x, cameraPos.y, -10);
+        transform.position = new Vector3(pos.x , _Target.y + OffsetY, pos.y);
+        if (Vector3.Magnitude(_Target - transform.position) > UpdateRange* UpdateRange)
+        {
+            transform.forward = (_Target - transform.position).normalized;
+        }
+        //transform.LookAt(_Target);
+
 
     }
 }
