@@ -45,8 +45,12 @@ public static class Game
         if (Schedule)
         {
             Schedule.StopTimer();
-            Spwaner.ResetPosition();
-            Camera.GetComponent<LookAt>().ResetY();
+            Schedule.Delay(() =>
+            {
+                Spwaner.ResetPosition();
+                Camera.GetComponent<LookAt>().ResetY();
+            }, 5);
+           
         }
 
     }
