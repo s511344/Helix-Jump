@@ -26,7 +26,7 @@ public class EventObj : MonoBehaviour
             callBack?.Invoke();
         }
     }
-    public void AddEndEvent(Action a)
+    public void AddTriggerEvent(Action a)
     {
         callBack += a;
     }

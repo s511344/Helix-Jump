@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PieSpawner : MonoBehaviour
 {
+    // 1,1,1,1,1,1,1,1,1,0 
+    // 
     public Transform Ball;
     private Vector3 _StartPosition;
     readonly System.Collections.Generic.List<GameObject> _Instances;
@@ -26,6 +28,8 @@ public class PieSpawner : MonoBehaviour
     public int Seed;
     public int PieCount;
     public float Space;
+    [SerializeField]
+    EventObj food;
 
     public EventObj startObject;
     public PieSpawner()
@@ -48,12 +52,29 @@ public class PieSpawner : MonoBehaviour
         if (startObject) 
         {
             startObject.gameObject.SetActive(true);
-            startObject.AddEndEvent(() => { 
+            startObject.AddTriggerEvent(() => { 
                 StartEvent?.Invoke();
                 startObject.gameObject.SetActive(false);
             });
         }
-
+        if (food != null) 
+        {
+            food.gameObject.SetActive(true);
+            food.AddTriggerEvent(
+                () => {
+                    food.gameObject.SetActive(false);
+                    Game.PlayerState.CurrentState = State.Small;
+                    //foreach (var instance in _Instances)
+                    //{
+                    //    var comps = instance.GetComponentsInChildren<Reflect>();
+                    //    foreach (var comp in comps)
+                    //    {
+                    //        comp.Force = 8;
+                    //    }
+                    //}
+                }
+            );
+        }
 
         var rand = new System.Random(Seed);
         var originPosition = Origin.transform.position;
@@ -87,7 +108,7 @@ public class PieSpawner : MonoBehaviour
         endObj.SetActive(true);
         endObj.transform.SetParent(Root);
         var endComp = endObj.GetComponent<EventObj>() ?? endObj.AddComponent<EventObj>();
-        endComp.AddEndEvent(() => { EndEvent?.Invoke(); Destroy(endComp); });
+        endComp.AddTriggerEvent(() => { EndEvent?.Invoke(); Destroy(endComp); });
        
 
         _Instances.Add(endObj);

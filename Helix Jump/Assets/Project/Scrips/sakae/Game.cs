@@ -15,6 +15,12 @@ public static class Game
 
     public static Schedule Schedule { get; private set; }
     public static GameObject MainObject { get; private set; }
+
+
+    public static GameObject Player { get; private set; }
+    public static PlayerEvent PlayerEvent { get; private set; }
+    public static PlayerState PlayerState { get; private set; }
+    
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void OnBeforeSceneLoad()
     {
@@ -29,9 +35,19 @@ public static class Game
         GameObject.DontDestroyOnLoad(MainObject);
         Schedule = MainObject.GetComponent<Schedule>() ?? MainObject.AddComponent<Schedule>();
 
+        var go = GameObject.FindObjectsOfType<GameObject>();
+        var obj = System.Array.Find(go, item => item.name == "Ball");
 
+        GameObject.DontDestroyOnLoad(obj);
+        Player = obj;
+
+
+        PlayerEvent = new PlayerEvent();
+        PlayerState = Player.GetComponent<PlayerState>();
+        PlayerState.player = Player;
+        PlayerState.playerEvent = PlayerEvent;
         Schedule.UpdateEvent += UITime.UpdateTime2;
-
+        Cursor.visible = false;
         if (Spwaner) 
         {
             Spwaner.StartEvent += StartGame;

@@ -6,37 +6,53 @@ using UnityEngine;
 
 public class Schedule:MonoBehaviour
 {
-    public int Time { get; private set; }
-    public Action<int> UpdateEvent;
+    public int Times { get; private set; }
+    public Action<float> UpdateEvent;
+    float startTime;
 
+    float current;
     bool startTimer = false;
-    Coroutine timer;
+    //Coroutine timer;
     public void StartTimer() 
     {
         startTimer = true;
-        Time = 0;
-        timer = StartCoroutine(TimerEvent());   
         
+        Times = 0;
+        startTime = Time.time;
+        current = 0f;
+    //    timer = StartCoroutine(TimerEvent());   
+
     }
     public void StopTimer()
     {
         startTimer = false;
-        StopCoroutine(timer);
+    //    StopCoroutine(timer);
     }
     void OnTime() 
     {
-        UpdateEvent?.Invoke(Time);
+       // UpdateEvent?.Invoke(Times);
        
 
     }
 
+    private void Start()
+    {
+        startTime = UnityEngine.Time.time;
+    }
+    private void Update()
+    {
+        if (startTimer == false) return;
+        current = Time.time - startTime;
+        UpdateEvent?.Invoke(current);
+
+    }
     IEnumerator TimerEvent()
     {
         yield return new WaitForSeconds(1);
         OnTime();
         if (startTimer) 
         {
-            Time++;
+            Times++;
             StartCoroutine(nameof(TimerEvent));
         }
     }

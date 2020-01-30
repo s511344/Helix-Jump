@@ -20,8 +20,10 @@ public class Reflect : MonoBehaviour
         var rig = collision.gameObject.GetComponent<Rigidbody>();
         
         rig.velocity = Vector3.zero;
-        
-        rig.AddForce(transform.forward * Force   , ForceMode.Impulse);
+        var speed = collision.gameObject.GetComponent<PlayerState>().Speed;
+        rig.AddForce(transform.forward * Force * speed, ForceMode.Impulse);
+
+        Game.Camera.GetComponent<LookAt>().currentStage = gameObject.transform.position;
 
         _CollisionCooldown.Reset();
     }
