@@ -10,6 +10,8 @@ public static class Game
      * https://docs.google.com/spreadsheets/d/1Ezv-0Ndg4h2v-jrBHpLttiL95uEAYYi1Yspp56oddzE/edit?usp=sharing
      */
     public static UITime UITime { get; private set; }
+    public static UIOver UIOver { get; private set; }
+
     public static PieSpawner Spwaner { get; private set; }
     public static Camera Camera { get; private set; }
 
@@ -28,7 +30,8 @@ public static class Game
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void OnAfterSceneLoad()
     {
-        UITime = GameObject.FindObjectOfType<UITime>(); 
+        UITime = GameObject.FindObjectOfType<UITime>();
+        UIOver = GameObject.FindObjectOfType<UIOver>();
         Spwaner = GameObject.FindObjectOfType<PieSpawner>();
         Camera = Camera.main;
         MainObject = new GameObject("Main");
@@ -53,6 +56,18 @@ public static class Game
             Spwaner.StartEvent += StartGame;
             Spwaner.EndEvent += EndGame;
         }
+        if (UIOver) 
+        {
+            UIOver.gameObject.SetActive(false);
+            UIOver.ResetClick += () => 
+            {
+                Cursor.visible = false;
+                UIOver.gameObject.SetActive(false);
+                Spwaner.ResetPosition();
+                PlayerState.CurrentState = State.General;
+                Camera.GetComponent<LookAt>().ResetY();
+            };
+        }
         
     }
 
@@ -63,9 +78,9 @@ public static class Game
             Schedule.StopTimer();
             Schedule.Delay(() =>
             {
-                Spwaner.ResetPosition();
-                Camera.GetComponent<LookAt>().ResetY();
-            }, 5);
+                Cursor.visible = true;
+                UIOver.gameObject.SetActive(true);
+            }, 2);
            
         }
 

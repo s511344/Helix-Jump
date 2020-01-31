@@ -63,22 +63,14 @@ public class PieSpawner : MonoBehaviour
             food.AddTriggerEvent(
                 () => {
                     food.gameObject.SetActive(false);
-                    Game.PlayerState.CurrentState = State.Small;
-                    //foreach (var instance in _Instances)
-                    //{
-                    //    var comps = instance.GetComponentsInChildren<Reflect>();
-                    //    foreach (var comp in comps)
-                    //    {
-                    //        comp.Force = 8;
-                    //    }
-                    //}
+                    Game.PlayerState.CurrentState = State.Big;
                 }
             );
         }
 
         var rand = new System.Random(Seed);
         var originPosition = Origin.transform.position;
-        for (var i = 1; i <= PieCount; ++i)
+        for (var i = 2; i <= PieCount; ++i)
         {
             var pirObj = GameObject.Instantiate(Origin);
             pirObj.transform.position = new Vector3(originPosition.x, originPosition.y - i * Space, originPosition.z);

@@ -23,7 +23,7 @@ public class Reflect : MonoBehaviour
         var speed = collision.gameObject.GetComponent<PlayerState>().Speed;
         rig.AddForce(transform.forward * Force * speed, ForceMode.Impulse);
 
-        Game.Camera.GetComponent<LookAt>().currentStage = gameObject.transform.position;
+      //  Game.Camera.GetComponent<LookAt>().currentStage = gameObject.transform.position;
 
         _CollisionCooldown.Reset();
     }
