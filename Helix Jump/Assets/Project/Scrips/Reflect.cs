@@ -1,7 +1,7 @@
 ﻿using System.Collections; 
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class Reflect : MonoBehaviour
 {
     public float Force;
@@ -20,9 +20,11 @@ public class Reflect : MonoBehaviour
 
         if (obs!=null && Game.PlayerState.CurrentState == State.Big && obs.Type == Obstacle.TYPE.可撞破)
         {
+            //this.GetComponent<MeshCollider>().isTrigger = true;
+            //this.transform.parent.gameObject.GetComponent<MeshCollider>().isTrigger = true;
+           // this.GetComponent<Material>().DOColor(new Color(0,0,0,0), 0.1f).OnStart(()=> {}).OnComplete(() => { });
             this.transform.parent.gameObject.SetActive(false);
-            return;
-                
+            return;    
         }
         var rig = collision.gameObject.GetComponent<Rigidbody>();
         

@@ -23,11 +23,16 @@ public class PieSpawner : MonoBehaviour
         Space = space;
         ResetPosition();
     }
-
+    public Transform StartTransform;
     public GameObject End;
     public int Seed;
     public int PieCount;
     public float Space;
+
+
+    [SerializeField]
+    GameObject 中間夾層;
+
     [SerializeField]
     EventObj bigFood;
 
@@ -81,35 +86,35 @@ public class PieSpawner : MonoBehaviour
             );
         }
 
-        var rand = new System.Random(Seed);
-        var originPosition = Origin.transform.position;
-        for (var i = 2; i <= PieCount; ++i)
-        {
-            var pirObj = GameObject.Instantiate(Origin);
-            pirObj.transform.position = new Vector3(originPosition.x, originPosition.y - i * Space, originPosition.z);
-            pirObj.SetActive(true);
-            pirObj.transform.SetParent(Root);
-            _Instances.Add(pirObj);
+        //var rand = new System.Random(Seed);
+        //var originPosition = Origin.transform.position;
+        //for (var i = 2; i <= PieCount; ++i)
+        //{
+        //    var pirObj = GameObject.Instantiate(Origin);
+        //    pirObj.transform.position = new Vector3(originPosition.x, originPosition.y - i * Space, originPosition.z);
+        //    pirObj.SetActive(true);
+        //    pirObj.transform.SetParent(Root);
+        //    _Instances.Add(pirObj);
 
-            var obstacles = pirObj.GetComponentsInChildren<Obstacle>();
-            var floors = obstacles.Where(o => o.Type == Obstacle.TYPE.FLOOR).OrderBy((o) => rand.NextDouble()).Take(rand.Next(1, 8));
-            foreach (var floor in floors)
-            {
-                floor.gameObject.transform.parent.gameObject.SetActive(false);
-            }
+        //    var obstacles = pirObj.GetComponentsInChildren<Obstacle>();
+        //    var floors = obstacles.Where(o => o.Type == Obstacle.TYPE.FLOOR).OrderBy((o) => rand.NextDouble()).Take(rand.Next(1, 8));
+        //    foreach (var floor in floors)
+        //    {
+        //        floor.gameObject.transform.parent.gameObject.SetActive(false);
+        //    }
 
-            var boards = obstacles.Where(o => o.Type == Obstacle.TYPE.BOARD && o.gameObject.transform.parent.gameObject.activeSelf).OrderBy((o) => rand.NextDouble()).Take(rand.Next(7, 8));
-            foreach (var board in boards)
-            {
-                board.gameObject.SetActive(false);
-            }
+        //    var boards = obstacles.Where(o => o.Type == Obstacle.TYPE.BOARD && o.gameObject.transform.parent.gameObject.activeSelf).OrderBy((o) => rand.NextDouble()).Take(rand.Next(7, 8));
+        //    foreach (var board in boards)
+        //    {
+        //        board.gameObject.SetActive(false);
+        //    }
 
 
-        }
+        //}
 
 
         var endObj = GameObject.Instantiate(End);
-        endObj.transform.position = new Vector3(originPosition.x, originPosition.y - (PieCount + 1) * Space, originPosition.z);
+        endObj.transform.position = new Vector3(0, StartTransform.position.y - (PieCount + 1) * Space, 0);
         endObj.SetActive(true);
         endObj.transform.SetParent(Root);
         var endComp = endObj.GetComponent<EventObj>() ?? endObj.AddComponent<EventObj>();
@@ -117,14 +122,19 @@ public class PieSpawner : MonoBehaviour
         foreach (var item in endObj.GetComponentsInChildren<MeshRenderer>())
         {
             item.material.color = Color.white;
-        } 
-            
+        }
+        var 夾層 = GameObject.Instantiate(中間夾層);
+        夾層.SetActive(true);
+        夾層.transform.SetParent(Root);
+        _Instances.Add(夾層);
         _Instances.Add(endObj);
     }
 
     public void ResetPosition()
     {
         Ball.position = _StartPosition;
+        Root.forward = Vector3.zero;
+        Root.rotation = Quaternion.identity;
         _Reset();
     }
 }
