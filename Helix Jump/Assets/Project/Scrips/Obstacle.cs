@@ -3,7 +3,8 @@
     public enum TYPE
     {
         FLOOR,
-        BOARD
+        BOARD,
+        可撞破,
     }
 
     public TYPE Type;

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections; 
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +16,14 @@ public class Reflect : MonoBehaviour
     {
         if (_CollisionCooldown.Ticks < _CooldownTicks)
             return;
+        var obs = this.GetComponent<Obstacle>();
 
+        if (obs!=null && Game.PlayerState.CurrentState == State.Big && obs.Type == Obstacle.TYPE.可撞破)
+        {
+            this.transform.parent.gameObject.SetActive(false);
+            return;
+                
+        }
         var rig = collision.gameObject.GetComponent<Rigidbody>();
         
         rig.velocity = Vector3.zero;

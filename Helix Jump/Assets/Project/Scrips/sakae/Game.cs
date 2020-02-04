@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [SerializeField]
 public static class Game
 {
@@ -30,7 +31,7 @@ public static class Game
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void OnAfterSceneLoad()
     {
-        UITime = GameObject.FindObjectOfType<UITime>();
+        UITime = Object.FindObjectOfType<UITime>();
         UIOver = GameObject.FindObjectOfType<UIOver>();
         Spwaner = GameObject.FindObjectOfType<PieSpawner>();
         Camera = Camera.main;
@@ -80,6 +81,22 @@ public static class Game
             {
                 Cursor.visible = true;
                 UIOver.gameObject.SetActive(true);
+
+               var lastTime = PlayerPrefs.GetFloat("LastTime");
+                PlayerPrefs.SetFloat("LastTime", Schedule.Current);
+
+                string v = "恭喜你獲得最佳分數 \n" + "分數: {0}";
+                string v2 = "並未取得最佳分數 \n" + "最佳分數: {0}";
+                Debug.Log(lastTime + "  " + Schedule.Current);
+                if (lastTime > Schedule.Current)
+                {
+                    
+                    UIOver.SetText(string.Format(v, Schedule.Current.ToString("0.00")));
+                }
+                else
+                {
+                    UIOver.SetText(string.Format(v2, lastTime.ToString("0.00")));
+                }
             }, 2);
            
         }

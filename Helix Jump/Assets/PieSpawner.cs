@@ -29,7 +29,10 @@ public class PieSpawner : MonoBehaviour
     public int PieCount;
     public float Space;
     [SerializeField]
-    EventObj food;
+    EventObj bigFood;
+
+    [SerializeField]
+    EventObj smailFood;
 
     public EventObj startObject;
     public PieSpawner()
@@ -57,13 +60,23 @@ public class PieSpawner : MonoBehaviour
                 startObject.gameObject.SetActive(false);
             });
         }
-        if (food != null) 
+        if (bigFood != null) 
         {
-            food.gameObject.SetActive(true);
-            food.AddTriggerEvent(
+            bigFood.gameObject.SetActive(true);
+            bigFood.AddTriggerEvent(
                 () => {
-                    food.gameObject.SetActive(false);
+                    bigFood.gameObject.SetActive(false);
                     Game.PlayerState.CurrentState = State.Big;
+                }
+            );
+        }
+        if (smailFood != null)
+        {
+            smailFood.gameObject.SetActive(true);
+            smailFood.AddTriggerEvent(
+                () => {
+                    smailFood.gameObject.SetActive(false);
+                    Game.PlayerState.CurrentState = State.Small;
                 }
             );
         }

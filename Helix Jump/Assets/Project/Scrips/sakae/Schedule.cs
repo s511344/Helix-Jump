@@ -73,4 +73,6 @@ public class Schedule:MonoBehaviour
         yield return new WaitForSeconds(delayTime);
         action();
     }
+
+    public float Current => current;
 }
