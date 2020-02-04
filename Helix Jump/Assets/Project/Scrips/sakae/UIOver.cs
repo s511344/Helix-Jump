@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class UIOver : UIBehaviour
 {
@@ -10,7 +11,7 @@ public class UIOver : UIBehaviour
 
 
     public Text text;
-
+    public TextMeshProUGUI txtMessage;
     public void OnClickQuit()
     {
         Application.Quit();
@@ -22,6 +23,6 @@ public class UIOver : UIBehaviour
     }
     public void SetText(string s) 
     {
-        text.text = s;
+        txtMessage.text = s;
     }
 }

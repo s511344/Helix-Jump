@@ -81,12 +81,13 @@ public static class Game
             {
                 Cursor.visible = true;
                 UIOver.gameObject.SetActive(true);
-
+                UITime.UpdateTime2(0);
                var lastTime = PlayerPrefs.GetFloat("LastTime");
                 PlayerPrefs.SetFloat("LastTime", Schedule.Current);
+                
 
-                string v = "恭喜你獲得最佳分數 \n" + "分數: {0}";
-                string v2 = "並未取得最佳分數 \n" + "最佳分數: {0}";
+                string v = "Get Best Score \n" + "Score: {0}";
+                string v2 = "NOoooooooooo \n" + "Last Score: {0}";
                 Debug.Log(lastTime + "  " + Schedule.Current);
                 if (lastTime > Schedule.Current)
                 {

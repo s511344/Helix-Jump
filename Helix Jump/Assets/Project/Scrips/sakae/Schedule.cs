@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+
 public class Schedule:MonoBehaviour
 {
     public int Times { get; private set; }

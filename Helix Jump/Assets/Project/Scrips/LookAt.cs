@@ -125,16 +125,19 @@ public class LookAt : MonoBehaviour
     }
     void test() 
     {
+        Time.timeScale = 0.001f;
        var pos = GetTarget(true);
         var target = Target.position;
         transform.position = new Vector3(pos.x, _Target.y + OffsetY + 大球仰角位移, pos.y);
-
+        transform.LookAt(new Vector3(_Target.x, _Target.y - OffsetY, _Target.z));
         Sequence sequence = DOTween.Sequence();
         sequence.Append(transform.DOLookAt(new Vector3(_Target.x, _Target.y - OffsetY, _Target.z), 0.5f));
-            //.Append(transform.DOLocalMove(new Vector3(pos.x, _Target.y + OffsetY + 大球仰角位移, pos.y), 0.1f))
-                
+        //.Append(transform.DOLocalMove(new Vector3(pos.x, _Target.y + OffsetY + 大球仰角位移, pos.y), 0.1f))
+
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => {
             isAni = false;
+            Time.timeScale = 1.0f;
         });
         sequence.Play();
 

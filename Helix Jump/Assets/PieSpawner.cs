@@ -114,8 +114,11 @@ public class PieSpawner : MonoBehaviour
         endObj.transform.SetParent(Root);
         var endComp = endObj.GetComponent<EventObj>() ?? endObj.AddComponent<EventObj>();
         endComp.AddTriggerEvent(() => { EndEvent?.Invoke(); Destroy(endComp); });
-       
-
+        foreach (var item in endObj.GetComponentsInChildren<MeshRenderer>())
+        {
+            item.material.color = Color.white;
+        } 
+            
         _Instances.Add(endObj);
     }
 
