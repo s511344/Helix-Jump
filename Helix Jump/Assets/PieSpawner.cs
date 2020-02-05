@@ -39,6 +39,8 @@ public class PieSpawner : MonoBehaviour
     [SerializeField]
     EventObj smailFood;
 
+    [SerializeField]
+    Material 可撞壞的材質;
     public EventObj startObject;
     public PieSpawner()
     {
@@ -75,16 +77,16 @@ public class PieSpawner : MonoBehaviour
                 }
             );
         }
-        if (smailFood != null)
-        {
-            smailFood.gameObject.SetActive(true);
-            smailFood.AddTriggerEvent(
-                () => {
-                    smailFood.gameObject.SetActive(false);
-                    Game.PlayerState.CurrentState = State.Small;
-                }
-            );
-        }
+        //if (smailFood != null)
+        //{
+        //    smailFood.gameObject.SetActive(true);
+        //    smailFood.AddTriggerEvent(
+        //        () => {
+        //            smailFood.gameObject.SetActive(false);
+        //            Game.PlayerState.CurrentState = State.Small;
+        //        }
+        //    );
+        //}
 
         //var rand = new System.Random(Seed);
         //var originPosition = Origin.transform.position;
@@ -125,6 +127,22 @@ public class PieSpawner : MonoBehaviour
         }
         var 夾層 = GameObject.Instantiate(中間夾層);
         夾層.SetActive(true);
+        var childs = 夾層.GetComponentsInChildren<Obstacle>();
+
+
+        Game.Schedule.Delay(() => {
+            var ya = new Color(67f, 72f, 144f);
+            foreach (var o in childs)
+            {
+                if (o.Type == Obstacle.TYPE.可撞破)
+                {
+                    o.gameObject.GetComponent<MeshRenderer>().material = 可撞壞的材質;
+                    o.transform.parent.GetComponent<MeshRenderer>().material = 可撞壞的材質;
+                }
+            }
+        },0.1f);
+
+
         夾層.transform.SetParent(Root);
         _Instances.Add(夾層);
         _Instances.Add(endObj);
