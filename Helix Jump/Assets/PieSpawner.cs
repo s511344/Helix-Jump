@@ -42,6 +42,13 @@ public class PieSpawner : MonoBehaviour
     [SerializeField]
     Material 可撞壞的材質;
     public EventObj startObject;
+
+    [SerializeField]
+    List<EventObj> eventObj;
+    [SerializeField]
+    Transform foodRoot;
+
+    [SerializeField]
     public PieSpawner()
     {
         _Instances = new List<GameObject>();
@@ -59,24 +66,53 @@ public class PieSpawner : MonoBehaviour
         {
             GameObject.Destroy(instance);
         }
-        if (startObject) 
+        void setEvent(EventObj obj,int idx) 
+        {
+            obj.gameObject.SetActive(true);
+            obj.transform.localPosition = Vector3.zero;
+            _Instances.Add(obj.gameObject);
+            obj.AddTriggerEvent(
+                () =>
+                {
+                    obj.gameObject.SetActive(false);
+                    Game.PlayerState.CurrentState = (State)idx;
+                }
+            );
+        }
+
+        if (foodRoot) 
+        {
+            var count = foodRoot.childCount;
+
+            for (int i = 0; i < count; i++)
+            {
+                var unityRandom = UnityEngine.Random.Range(0, 2);
+                var t = foodRoot.GetChild(i);
+                setEvent(GameObject.Instantiate(eventObj[unityRandom], t), unityRandom);
+               
+            }
+        }
+        
+
+        if (startObject)
         {
             startObject.gameObject.SetActive(true);
-            startObject.AddTriggerEvent(() => { 
+            startObject.AddTriggerEvent(() =>
+            {
                 StartEvent?.Invoke();
                 startObject.gameObject.SetActive(false);
             });
         }
-        if (bigFood != null) 
-        {
-            bigFood.gameObject.SetActive(true);
-            bigFood.AddTriggerEvent(
-                () => {
-                    bigFood.gameObject.SetActive(false);
-                    Game.PlayerState.CurrentState = State.Big;
-                }
-            );
-        }
+        //if (bigFood != null) 
+        //{
+        //    bigFood.gameObject.SetActive(true);
+        //    bigFood.AddTriggerEvent(
+        //        () => {
+        //            bigFood.gameObject.SetActive(false);
+        //            Game.PlayerState.CurrentState = State.Big;
+        //        }
+        //    );
+        //}
         //if (smailFood != null)
         //{
         //    smailFood.gameObject.SetActive(true);
@@ -88,7 +124,7 @@ public class PieSpawner : MonoBehaviour
         //    );
         //}
 
-        //var rand = new System.Random(Seed);
+        //
         //var originPosition = Origin.transform.position;
         //for (var i = 2; i <= PieCount; ++i)
         //{
@@ -138,6 +174,17 @@ public class PieSpawner : MonoBehaviour
                 {
                     o.gameObject.GetComponent<MeshRenderer>().material = 可撞壞的材質;
                     o.transform.parent.GetComponent<MeshRenderer>().material = 可撞壞的材質;
+                    var s = Instantiate(eventObj[2], o.transform,false);
+                    s.gameObject.SetActive(true);
+                    s.transform.localPosition = new Vector3(0.158f, 0.517f, 0.87f);
+                    s.transform.localEulerAngles = Vector3.zero;
+                    s.AddTriggerEvent(() => {
+                        if (Game.PlayerState.CurrentState == State.Big)
+                        {
+                            o.transform.parent.gameObject.SetActive(false);
+                        }
+
+                     });
                 }
             }
         },0.1f);

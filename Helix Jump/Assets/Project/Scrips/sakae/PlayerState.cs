@@ -63,4 +63,6 @@ public class PlayerState : MonoBehaviour, INotifyPropertyChanged
     {
         playerEvent.ToGeneral(player);
     }
+    [ContextMenu("Set Random Number")]
+    void SetCurrent() { CurrentState = State.Small; }
 }

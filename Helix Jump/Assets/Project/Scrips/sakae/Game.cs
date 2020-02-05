@@ -87,18 +87,17 @@ public static class Game
                 
 
                 string v = "Get Best Score \n" + "Score: {0}";
-                string v2 = "NOoooooooooo \n" + "Last Score: {0}";
+                string v2 = "NO ooooooooo \n" + "Last Score: {0}";
                 Debug.Log(lastTime + "  " + Schedule.Current);
-                if (lastTime > Schedule.Current)
+                if (Schedule.Current>lastTime)
                 {
-                    
                     UIOver.SetText(string.Format(v, Schedule.Current.ToString("0.00")));
                 }
                 else
                 {
                     UIOver.SetText(string.Format(v2, lastTime.ToString("0.00")));
                 }
-            }, 2);
+            }, 0.05f);
            
         }
 
